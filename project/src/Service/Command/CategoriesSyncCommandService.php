@@ -2,27 +2,20 @@
 
 namespace App\Service\Command;
 
-use GuzzleHttp\Client;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use GuzzleHttp\Exception\GuzzleException;
 
 class CategoriesSyncCommandService
 {
-    private const ROOT_URI = '/peckingorder';
     private const CATEGORY_TITLE = 'Наименование';
     private const CATEGORY_ID = 'УникальныйИдентификатор';
     private const PARENT_CATEGORY_ID = 'РодительУникальныйИдентификатор';
     private const MAIN_CATEGORY_IDENTIFIER = '00000000-0000-0000-0000-000000000000';
     private static array $slugCollection = [];
-    private static mixed $error = null;
-
-    private Client $client;
 
     public function __construct()
     {
-        $rootUri = env('ROOT_SERVER') . self::ROOT_URI;
-        $this->client = new Client(['base_uri' => $rootUri]);
     }
 
     public static function init(): self
@@ -33,16 +26,10 @@ class CategoriesSyncCommandService
     /**
      * @throws GuzzleException
      */
-    public function execute(bool $fromFile = false): array
+    public function execute(): array
     {
-        if ($fromFile) {
-            $file = file_get_contents(__DIR__ . '/../../../var/data/category.json');
-            $data = json_decode($file, true);
-        } else {
-            if (!$data = self::getData()) {
-                return self::$error;
-            }
-        }
+        $file = file_get_contents(__DIR__ . '/../../../var/data/categories.json');
+        $data = json_decode($file, true);
 
         $allCategories = self::getCategories($data);
         $idCategories = [];
@@ -80,6 +67,7 @@ class CategoriesSyncCommandService
             'updatedCategories' => count($sortedCategories),
         ];
     }
+
     public static function getCategories(array $data): array
     {
         $categories = [];
@@ -122,26 +110,4 @@ class CategoriesSyncCommandService
 
         return $slug;
     }
-
-    /**
-     * @throws GuzzleException
-     */
-    private function getData(): ?array
-    {
-        $response = $this->client->request('GET');
-        $responseCode = $response->getStatusCode();
-        $responseContent = $response->getBody()->getContents();
-
-        if ($responseCode !== 200) {
-            self::$error['error'] = sprintf('Код ответа сервера: %s', $responseCode);
-            return null;
-        }
-
-        $data = json_decode($responseContent, true);
-
-        file_put_contents(__DIR__ . '/../../../var/data/category.json', json_encode($data['peckingorder'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-
-        return $data['peckingorder'];
-    }
-
 }
