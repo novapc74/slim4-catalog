@@ -80,46 +80,6 @@ class CategoriesSyncCommandService
             'updatedCategories' => count($sortedCategories),
         ];
     }
-
-//    public function execute(): array
-//    {
-//        if (!$data = self::getData()) {
-//            return self::$error;
-//        }
-//
-//        $allCategories = self::getCategories($data);
-//        $sortedCategories = [];
-//        $resolvedCategoriesId = [];
-//
-//        // Создаем ассоциативный массив для быстрого доступа к категориям по ID
-//        $idCategories = [];
-//        foreach ($allCategories as $category) {
-//            $idCategories[$category['id']] = $category;
-//        }
-//
-//        // Наполняем массив категориями самого верхнего уровня и дочерними категориями
-//        foreach ($allCategories as $category) {
-//            if (is_null($category['parent_category_id'])) {
-//                $sortedCategories[] = $category;
-//                $resolvedCategoriesId[] = $category['id'];
-//            }
-//        }
-//
-//        // Обрабатываем дочерние категории
-//        foreach ($idCategories as $category) {
-//            if (in_array($category['parent_category_id'], $resolvedCategoriesId)) {
-//                $sortedCategories[] = $category;
-//                $resolvedCategoriesId[] = $category['id'];
-//            }
-//        }
-//
-//        // Обновляем или создаем категории
-//        Category::upsert($sortedCategories, ['id', 'slug']);
-//
-//        return [
-//            'updatedCategories' => count($sortedCategories),
-//        ];
-//    }
     public static function getCategories(array $data): array
     {
         $categories = [];

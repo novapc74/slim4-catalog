@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use App\Command\RemoteDataCommand;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use App\Command\CategoriesSyncCommand;
@@ -43,6 +44,7 @@ try {
 
     #TODO Регистрация консольных.
     $application->add($container->get(CategoriesSyncCommand::class));
+    $application->add($container->get(RemoteDataCommand::class));
 
     exit($application->run());
 } catch (Throwable $exception) {
