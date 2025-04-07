@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+
+use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
+use App\Command\CategoriesSyncCommand;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../', '.env');
+$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../', '.env');
+$dotenv->load();
+
+try {
+// Загрузка конфигурации
+    $settings = require __DIR__ . '/../config/settings.php';
+    $capsule = new Capsule;
+    $capsule->addConnection([
+        'driver' => 'mysql',
+        'host' => $settings['database']['host'],
+        'database' => $settings['database']['name'],
+        'username' => $settings['database']['user'],
+        'password' => $settings['database']['password'],
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => '',
+    ]);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    /** @var ContainerInterface $container */
+    $container = (new ContainerBuilder())
+        ->addDefinitions(__DIR__ . '/../config/container.php')
+        ->build();
+
+    /** @var Application $application */
+    $application = $container->get(Application::class);
+
+    #TODO Регистрация консольных.
+    $application->add($container->get(CategoriesSyncCommand::class));
+
+    exit($application->run());
+} catch (Throwable $exception) {
+    echo $exception->getMessage();
+    exit(Command::FAILURE);
+}
