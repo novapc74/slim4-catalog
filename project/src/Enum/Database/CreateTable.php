@@ -38,4 +38,21 @@ enum CreateTable: string
     slug VARCHAR(255) NOT NULL UNIQUE,
     parent_category_id UUID,
     FOREIGN KEY (parent_category_id) REFERENCES categories(id))";
+    case CREATE_PRODUCT = "CREATE TABLE products (
+    id UUID PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    brand_id SMALLINT,
+    FOREIGN KEY (brand_id) REFERENCES brands(id),
+    category_id UUID,
+    FOREIGN KEY (category_id) REFERENCES categories(id))";
+    case CREATE_PRICE = "CREATE TABLE prices (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    value SMALLINT NOT NULL,
+    product_id UUID,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    city_id SMALLINT,
+    FOREIGN KEY (city_id) REFERENCES cities(id),
+    price_type_id SMALLINT,
+    FOREIGN KEY (price_type_id) REFERENCES price_types(id))";
 }

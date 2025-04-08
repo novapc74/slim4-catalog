@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Traits\GenerateUuidTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use App\Traits\GenerateUniqueSlugTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @mixin Builder
  */
-class Category extends Model
+class Product extends Model
 {
     use HasUuids;
     use GenerateUuidTrait;
@@ -37,7 +37,8 @@ class Category extends Model
         'id',
         'title',
         'slug',
-        'parent_category_id',
+        'category_id',
+        'brand_id',
     ];
 
     /**
@@ -48,17 +49,12 @@ class Category extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function categories(): HasMany
+    public function brand(): BelongsTo
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Brand::class);
     }
 
-    public function Products(): HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
-
-    public static function upsertCategory($sortedCategories): int
+    public static function upsertProduct($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id', 'slug']);
     }
