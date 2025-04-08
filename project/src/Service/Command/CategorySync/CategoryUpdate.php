@@ -27,20 +27,27 @@ class CategoryUpdate
         ];
     }
 
+    private static function getFileData(): array
+    {
+        $file = file_get_contents(self::FILE_PATH);
+        return json_decode($file, true);
+    }
+
     public static function getCategories(array $data): array
     {
         $categories = [];
         foreach ($data as $categoryItem) {
-            $categories[] = CategoryAdapter::makeCategory($categoryItem);
+            $categories[] = CategoryDto::makeCategory($categoryItem);
         }
 
         return $categories;
     }
 
-    private static function getFileData(): array
+    private static function sortCategories(array $categories): void
     {
-        $file = file_get_contents(self::FILE_PATH);
-        return json_decode($file, true);
+        self::setCategoriesById($categories);
+        self::addMainCategories($categories);
+        self::addChildCategories($categories);
     }
 
     private static function setCategoriesById(array $categories): void
@@ -81,12 +88,5 @@ class CategoryUpdate
                 }
             }
         }
-    }
-
-    private static function sortCategories(array $categories): void
-    {
-        self::setCategoriesById($categories);
-        self::addMainCategories($categories);
-        self::addChildCategories($categories);
     }
 }

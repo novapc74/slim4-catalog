@@ -4,7 +4,7 @@ namespace App\Service\Command\CategorySync;
 
 use Illuminate\Support\Str;
 
-class CategoryAdapter
+class CategoryDto
 {
     private const CATEGORY_TITLE = 'Наименование';
     private const CATEGORY_ID = 'УникальныйИдентификатор';
@@ -41,6 +41,7 @@ class CategoryAdapter
             $slug = $slug . '-' . $i;
             $i++;
         }
+
         self::$slugCollection[] = $slug;
 
         return $slug;

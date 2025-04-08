@@ -18,7 +18,7 @@ class CategorySyncCommand extends Command
         parent::configure();
 
         $this->setName('app:sync-categories');
-        $this->setDescription('Синхронизация категорий с удаленным сервером.');
+        $this->setDescription('Создание / обновление категорий из файла.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
