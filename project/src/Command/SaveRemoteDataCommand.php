@@ -10,7 +10,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoteDataCommand extends Command
+class SaveRemoteDataCommand extends Command
 {
     use HumanSizeCounterTrait;
 
@@ -30,7 +30,7 @@ class RemoteDataCommand extends Command
         ini_set('memory_limit', '512M');
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
-        $io->title('Сохраняем на сервере данные для обновлений категорий, товаров, цен и остатков.');
+        $io->title('Сохраняем на сервере данные для обновления категорий, товаров, цен и остатков.');
 
         $categoryData = $this->getRemoteData('/peckingorder');
         $this->saveCategories($categoryData);

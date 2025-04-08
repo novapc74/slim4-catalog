@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-use App\Command\RemoteDataCommand;
+use App\Command\SaveRemoteDataCommand;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
-use App\Command\CategoriesSyncCommand;
+use App\Command\CategorySyncCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -43,8 +43,8 @@ try {
     $application = $container->get(Application::class);
 
     #TODO Регистрация консольных.
-    $application->add($container->get(CategoriesSyncCommand::class));
-    $application->add($container->get(RemoteDataCommand::class));
+    $application->add($container->get(CategorySyncCommand::class));
+    $application->add($container->get(SaveRemoteDataCommand::class));
 
     exit($application->run());
 } catch (Throwable $exception) {

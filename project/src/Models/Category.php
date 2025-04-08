@@ -4,11 +4,15 @@ namespace App\Models;
 
 use App\Traits\GenerateUuidTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use App\Traits\GenerateUniqueSlugTrait;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @mixin Builder
+ */
 class Category extends Model
 {
     use HasUuids;
@@ -44,5 +48,10 @@ class Category extends Model
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
+    }
+
+    public static function upsertCategory($sortedCategories): int
+    {
+        return self::upsert($sortedCategories, ['id', 'slug']);
     }
 }

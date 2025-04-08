@@ -3,16 +3,16 @@
 namespace App\Command;
 
 use App\Traits\HumanSizeCounterTrait;
-use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
+use App\Service\Command\CategorySync\CategoryUpdate;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\Command\CategoriesSyncCommandService;
 
-class CategoriesSyncCommand extends Command
+class CategorySyncCommand extends Command
 {
     use HumanSizeCounterTrait;
+
     protected function configure(): void
     {
         parent::configure();
@@ -21,17 +21,13 @@ class CategoriesSyncCommand extends Command
         $this->setDescription('Синхронизация категорий с удаленным сервером.');
     }
 
-    /**
-     * @throws GuzzleException
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Обновляем категории');
 
-        $result = CategoriesSyncCommandService::init()
-            ->execute();
+        $result = CategoryUpdate::execute();
 
         if ($result['errors'] ?? null) {
             $io->error(implode(PHP_EOL, $result['errors']));
@@ -39,7 +35,12 @@ class CategoriesSyncCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->success(sprintf('Создали/обновили категорий: %d, Память: %s', array_shift($result), self::humanizeUsageMemory()));
+        $io->success(sprintf(
+            'Создали/обновили категорий: %d, Всего категорий: %d, Память: %s',
+            array_shift($result),
+            array_shift($result),
+            self::humanizeUsageMemory()
+        ));
 
         return Command::SUCCESS;
     }
