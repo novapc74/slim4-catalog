@@ -2,7 +2,7 @@
 
 namespace App\Enum\Seed;
 
-enum SeedDataBase: string
+enum Seeder: string
 {
     case SEED_CITY = "INSERT INTO cities (title, slug) VALUES
     ('Санкт-Петербург', 'spb'),

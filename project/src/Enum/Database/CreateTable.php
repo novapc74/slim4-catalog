@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enum\DataBase;
+namespace App\Enum\Database;
 
 enum CreateTable: string
 {
