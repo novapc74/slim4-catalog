@@ -54,6 +54,11 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function prices(): HasMany
+    {
+        return $this->hasMany(Price::class);
+    }
+
     public static function upsertProduct($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id', 'slug']);

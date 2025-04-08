@@ -30,9 +30,21 @@ class Price extends Model
         'city_id',
     ];
 
-    #TODO тут, нужно подумать, :) как и везде.
     public static function upsertPrice($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id']);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+    public function priceType(): BelongsTo
+    {
+        return $this->belongsTo(PriceType::class);
     }
 }
