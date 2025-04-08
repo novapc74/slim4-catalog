@@ -55,4 +55,12 @@ enum CreateTable: string
     FOREIGN KEY (city_id) REFERENCES cities(id),
     price_type_id SMALLINT,
     FOREIGN KEY (price_type_id) REFERENCES price_types(id))";
+    case CREATE_PRODUCT_PROPERTY = "CREATE TABLE product_properties (
+    id SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    value VARCHAR(50),
+    product_id UUID,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    property_id SMALLINT,
+    FOREIGN KEY (property_id) REFERENCES properties(id)
+)";
 }
