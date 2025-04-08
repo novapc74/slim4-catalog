@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class Measure extends Model
 {
     public $timestamps = false;
     public $fillable = [
-        'title',
-        'slug'
+        'title'
     ];
 }
