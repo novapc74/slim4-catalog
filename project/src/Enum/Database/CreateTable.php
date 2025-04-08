@@ -13,12 +13,19 @@ enum CreateTable: string
     case CREATE_CITY = "CREATE TABLE cities (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL,
-    slug VARCHAR(50) NOT NULL UNIQUE
-)";
+    slug VARCHAR(50) NOT NULL UNIQUE)";
+
+    case CREATE_BRAND = "CREATE TABLE brands (
+    id SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    slug VARCHAR(50) NOT NULL UNIQUE)";
     case CREATE_MEASURE = "CREATE TABLE measures (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL UNIQUE
-                      )";
+    title VARCHAR(50) NOT NULL UNIQUE)";
+    case CREATE_PRICE_TYPE = "CREATE TABLE price_types(
+    id    SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL UNIQUE,
+    slug  VARCHAR(50) NOT NULL UNIQUE)";
     case CREATE_PROPERTY = "CREATE TABLE properties (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL UNIQUE,
@@ -30,7 +37,5 @@ enum CreateTable: string
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     parent_category_id UUID,
-    FOREIGN KEY (parent_category_id) REFERENCES categories(id)
-)";
-
+    FOREIGN KEY (parent_category_id) REFERENCES categories(id))";
 }
