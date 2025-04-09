@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use App\Command\BrandSyncCommand;
 use App\Command\SaveRemoteDataCommand;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
@@ -45,6 +46,7 @@ try {
     #TODO Регистрация консольных.
     $application->add($container->get(CategorySyncCommand::class));
     $application->add($container->get(SaveRemoteDataCommand::class));
+    $application->add($container->get(BrandSyncCommand::class));
 
     exit($application->run());
 } catch (Throwable $exception) {

@@ -32,21 +32,22 @@ class SaveRemoteDataCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Сохраняем на сервере данные для обновления категорий, товаров, цен и остатков.');
 
-        $categoryData = $this->getRemoteData('/peckingorder');
-        $this->saveCategories($categoryData);
-        unset($categoryData);
+//        $categoryData = $this->getRemoteData('/peckingorder');
+//        $this->saveCategories($categoryData);
+//        unset($categoryData);
 
-        $productData = $this->getRemoteData('/categories_with_products_hex');
+//        $productData = $this->getRemoteData('/categories_with_products_hex');
+        $productData = $this->getRemoteData('/catalog?Артикул=129220');
         $this->saveProducts($productData);
         unset($productData);
 
-        $leftoversData = $this->getRemoteData('/remains');
-        $this->saveLeftovers($leftoversData);
-        unset($leftoversData);
+//        $leftoversData = $this->getRemoteData('/remains');
+//        $this->saveLeftovers($leftoversData);
+//        unset($leftoversData);
 
-        $priceData = $this->getRemoteData('/price');
-        $this->savePrices($priceData);
-        unset($priceData);
+//        $priceData = $this->getRemoteData('/price');
+//        $this->savePrices($priceData);
+//        unset($priceData);
 
         $io->success(sprintf(
                 'Сохранили категории, хеш-товары, остатки, цены. Память: %s, Время: %s',
