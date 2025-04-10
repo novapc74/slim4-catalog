@@ -3,14 +3,14 @@ version: '3.8'
 services:
     nginx:
         restart: always
-        container_name: ${APP_NAME}-nginx
-        build:
-            context: docker
-            dockerfile: development/nginx/Dockerfile
+        image: openresty/openresty:alpine
+        container_name: ${APP_NAME}-nginx_lua
         ports:
             - "8055:80"
         volumes:
             - ./project:/project
+            - ./docker/embed/nginx/conf.d/default.conf:/usr/local/openresty/nginx/conf/nginx.conf
+            - ./lua:/usr/local/openresty/nginx/lua
         depends_on:
             - php-fpm
             - php-cli
