@@ -12,10 +12,13 @@ final class JsonRenderer
             $status = 503;
         }
 
-        $response = $response->withHeader('Content-Type', 'application/json')->withStatus($status);
+        $data = is_array($data)
+            ? json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR)
+            : $data;
 
-        $response->getBody()->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR));
 
-        return $response;
+        $response->getBody()->write($data);
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus($status);
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Psr\Container\ContainerInterface;
@@ -17,6 +15,10 @@ return [
         // Настраиваем Eloquent
         $settings = $container->get('settings');
         (require __DIR__ . '/eloquent.php')($settings);
+
+        // Настраиваем Redis Cache
+        $settings = $container->get('settings');
+        (require __DIR__ . '/cache.php')($container, $settings);
 
         // Регистрируем маршруты
         (require __DIR__ . '/routes.php')($app);

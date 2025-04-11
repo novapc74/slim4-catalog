@@ -2,11 +2,12 @@
 
 namespace App\Action;
 
+use Exception;
 use App\Renderer\JsonRenderer;
 use App\Traits\HumanSizeCounterTrait;
-use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 abstract class AbstractAction
 {
@@ -18,6 +19,9 @@ abstract class AbstractAction
 
     protected array $args;
 
+    public function __construct(protected TagAwareCacheInterface $cache) // Добавляем кэш в конструктор
+    {
+    }
 
     public function __invoke(Request $request, ResponseInterface $response, array $args): ResponseInterface
     {

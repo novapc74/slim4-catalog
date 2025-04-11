@@ -1,3 +1,5 @@
-redis
 volumes
 .idea
+lua/example.lua
+lua/.env
+

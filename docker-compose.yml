@@ -4,6 +4,7 @@ services:
     nginx:
         restart: always
         image: openresty/openresty:alpine
+#        image: openresty/openresty:1.19.3.1-0-alpine-fat
         container_name: ${APP_NAME}-nginx_lua
         ports:
             - "8055:80"
