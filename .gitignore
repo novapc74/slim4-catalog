@@ -1,5 +1,4 @@
 volumes
 .idea
-lua/example.lua
-lua/.env
+lua
 
