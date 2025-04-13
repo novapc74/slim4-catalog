@@ -24,6 +24,7 @@ class BrandSyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        ini_set('memory_limit', -1);
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Создаем, обновляем бренды товаров.');
@@ -35,7 +36,7 @@ class BrandSyncCommand extends Command
         $resolvedBrands = [];
         foreach ($collection as $item) {
 
-            if (!$brand = ProductDto::new($item)->getBrand()) {
+            if (!$brand = ProductDto::new($item)->getBrandTitle()) {
                 continue;
             }
 

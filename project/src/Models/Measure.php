@@ -14,4 +14,9 @@ class Measure extends Model
     public $fillable = [
         'title'
     ];
+
+    public static function upsertMeasure(array $data): int
+    {
+        return self::upsert($data, ['id', 'title']);
+    }
 }

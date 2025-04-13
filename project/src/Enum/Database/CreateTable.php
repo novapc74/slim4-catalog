@@ -28,7 +28,7 @@ enum CreateTable: string
     slug  VARCHAR(50) NOT NULL UNIQUE)";
     case CREATE_PROPERTY = "CREATE TABLE properties (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL UNIQUE,
     is_invisible TINYINT(1) NOT NULL DEFAULT 0,
     measure_id SMALLINT,
     FOREIGN KEY (measure_id) REFERENCES measures(id))";
@@ -42,6 +42,7 @@ enum CreateTable: string
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
     brand_id SMALLINT,
     FOREIGN KEY (brand_id) REFERENCES brands(id),
     category_id UUID,
