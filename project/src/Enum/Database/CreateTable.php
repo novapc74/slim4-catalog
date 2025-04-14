@@ -21,35 +21,41 @@ enum CreateTable: string
     slug VARCHAR(50) NOT NULL UNIQUE)";
     case CREATE_MEASURE = "CREATE TABLE measures (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL UNIQUE)";
+    title VARCHAR(50) NOT NULL UNIQUE);";
     case CREATE_PRICE_TYPE = "CREATE TABLE price_types(
     id    SMALLINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL UNIQUE,
-    slug  VARCHAR(50) NOT NULL UNIQUE)";
+    slug  VARCHAR(50) NOT NULL UNIQUE);";
     case CREATE_PROPERTY = "CREATE TABLE properties (
     id SMALLINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL UNIQUE,
-    is_invisible TINYINT(1) NOT NULL DEFAULT 0,
-    measure_id SMALLINT,
-    FOREIGN KEY (measure_id) REFERENCES measures(id))";
+    measure VARCHAR(255),
+    is_invisible TINYINT(1) NOT NULL DEFAULT 0);";
     case CREATE_CATEGORY = "CREATE TABLE categories (
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     parent_category_id UUID,
-    FOREIGN KEY (parent_category_id) REFERENCES categories(id))";
+    FOREIGN KEY (parent_category_id) REFERENCES categories(id));";
+    case CREATE_PRODUCT_IDENTIFIER = "CREATE TABLE product_identifiers (
+    id SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    shop_code VARCHAR(25) UNIQUE,
+    sku VARCHAR(50),
+    description TEXT
+);";
     case CREATE_PRODUCT = "CREATE TABLE products (
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT,
     brand_id SMALLINT,
-    FOREIGN KEY (brand_id) REFERENCES brands(id),
     category_id UUID,
-    FOREIGN KEY (category_id) REFERENCES categories(id))";
+    product_identifier_id SMALLINT,
+    FOREIGN KEY (brand_id) REFERENCES brands(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (product_identifier_id) REFERENCES product_identifiers(id));";
     case CREATE_PRICE = "CREATE TABLE prices (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    value SMALLINT NOT NULL,
+    value INT NOT NULL,
     product_id UUID,
     FOREIGN KEY (product_id) REFERENCES products(id),
     city_id SMALLINT,

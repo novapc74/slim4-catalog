@@ -16,13 +16,8 @@ class Property extends Model
         'title'
     ];
 
-    public function measure(): BelongsTo
-    {
-        return $this->belongsTo(Measure::class);
-    }
-
     public static function upsertProperty(array $data): int
     {
-        return self::upsert($data, ['id', 'title', 'measure_id']);
+        return self::upsert($data, ['id', 'title', 'measure']);
     }
 }

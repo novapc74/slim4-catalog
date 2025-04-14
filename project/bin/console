@@ -2,8 +2,8 @@
 <?php
 
 use App\Command\BrandSyncCommand;
-use App\Command\MeasureSyncCommand;
-use App\Command\ProductRemoteDataCommand;
+use App\Command\ProductIdentifierSyncCommand;
+use App\Command\PriceSyncCommand;
 use App\Command\ProductSyncCommand;
 use App\Command\PropertySyncCommand;
 use App\Command\SaveRemoteDataCommand;
@@ -52,8 +52,9 @@ try {
     $application->add($container->get(SaveRemoteDataCommand::class));
     $application->add($container->get(BrandSyncCommand::class));
     $application->add($container->get(ProductSyncCommand::class));
-    $application->add($container->get(MeasureSyncCommand::class));
+    $application->add($container->get(ProductIdentifierSyncCommand::class));
     $application->add($container->get(PropertySyncCommand::class));
+    $application->add($container->get(PriceSyncCommand::class));
 
     exit($application->run());
 } catch (Throwable $exception) {

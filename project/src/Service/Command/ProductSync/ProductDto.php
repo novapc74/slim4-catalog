@@ -4,13 +4,13 @@ namespace App\Service\Command\ProductSync;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Measure;
+use App\Models\ProductIdentifier;
 use Illuminate\Support\Str;
 
 class ProductDto
 {
     private array $slugCollection = [];
-    private array $productData = [];
+    private array $productData;
 
     public function __construct(mixed $productData)
     {
@@ -32,8 +32,14 @@ class ProductDto
             'slug' => self::getSlug(self::getProductTitle()),
             'category_id' => self::getCategoryId() ?? null,
             'brand_id' => self::getBrandId() ?? null,
-            'description' => mb_substr(self::getDescription(), 0, 999),
+            'product_identifier_id' => self::getProductIdentifierId() ?? null
         ];
+    }
+
+    private function getProductIdentifierId(): ?int
+    {
+        return ProductIdentifier::query()->where('shop_code', $this->productData['КодТовара'])->value('id') ?? null;
+
     }
 
     public function getProductUuid(): string
@@ -92,21 +98,12 @@ class ProductDto
         return mb_ucfirst(mb_strtolower($brand));
     }
 
-    public function getProductProperties(): array
-    {
-        return $this->productData;
-    }
-
     public function getProperties(): array
     {
         $properties = [];
 
-        self::setProperty($properties, 'Артикул', 'Артикул');
-        self::setProperty($properties, 'КодТовара', 'Код товара');
-
         $mainPropertyCollection = self::getPropertyCollection('ОсновныеЕдиницыИзмерения');
         $additionalPropertyCollection = self::getPropertyCollection('ДополнительныеРеквизиты');
-
 
         return array_merge($properties, $mainPropertyCollection, $additionalPropertyCollection);
     }
@@ -130,54 +127,39 @@ class ProductDto
             }
 
             if ($measure = trim($data[1] ?? null)) {
-                $measureId = Measure::query()->where('title', $measure)->value('id') ?? null;
+                $measure = self::sanitizeMeasure($measure);
             }
 
             $properties[]= [
                 'title' => $property,
-                'measure_id' => $measureId ?? null,
+                'measure' => $measure,
             ];
         }
 
         return $properties;
     }
 
-    private  function setProperty(array &$properties, string $title, string $newTitle = null,  $measureId = null): void
+    private static function sanitizeMeasure(string $measure): string
     {
-        if ($this->productData[$title] ?? null) {
-            $properties[] = [
-                'title' => $newTitle ?? $title,
-                'measure_id' => $measureId,
-            ];
-        }
+        return match ($measure) {
+            '°C', '°С' => '°С',
+            'A', 'А' => 'А',
+            'В / Гц', 'В/Гц' => 'В/Гц',
+            'шт', 'шт.' => 'шт',
+            'ч', 'час' => 'час',
+            'с', 'сек' => 'сек',
+            'град', 'Градусы' => 'град',
+            'Н*м', 'Н×м' => 'Н×м',
+            default => $measure
+        };
     }
 
-    public function getMeasures(): array
+    public function getProductIdentifier(): array
     {
-        $measures = self::getMeasureCollection($this->productData['ОсновныеЕдиницыИзмерения']);
-        $additionalMeasures = self::getMeasureCollection($this->productData['ДополнительныеРеквизиты']);
-
-        $measures = array_merge($measures, $additionalMeasures);
-
-        $measures = array_unique(array_filter($measures, function($measure) {
-            return !empty($measure);
-        }));
-
-        return array_values($measures);
-    }
-
-    private static function getMeasureCollection(array $propertyCollection): array
-    {
-        $measures = [];
-        foreach ($propertyCollection as $property) {
-            $nameData = $property['Имя'];
-            if(!$measure = explode(',', $nameData)[1] ?? null) {
-                continue;
-            }
-
-            $measures[] = trim($measure);
-        }
-
-        return $measures;
+        return [
+            'shop_code' => $this->productData['КодТовара'] ?? null,
+            'sku' => $this->productData['Артикул'] ?? null,
+            'description' => mb_substr(self::getDescription(), 0, 999),
+        ];
     }
 }
