@@ -2,6 +2,7 @@
 <?php
 
 use App\Command\BrandSyncCommand;
+use App\Command\LeftoversSyncCommand;
 use App\Command\ProductIdentifierSyncCommand;
 use App\Command\PriceSyncCommand;
 use App\Command\ProductPropertySyncCommand;
@@ -57,6 +58,7 @@ try {
     $application->add($container->get(PropertySyncCommand::class));
     $application->add($container->get(PriceSyncCommand::class));
     $application->add($container->get(ProductPropertySyncCommand::class));
+    $application->add($container->get(LeftoversSyncCommand::class));
 
     exit($application->run());
 } catch (Throwable $exception) {

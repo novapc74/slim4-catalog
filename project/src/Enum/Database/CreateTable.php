@@ -65,4 +65,11 @@ enum CreateTable: string
     FOREIGN KEY (product_id) REFERENCES products(id),
     property_id INT,
     FOREIGN KEY (property_id) REFERENCES properties(id));";
+    case CREATE_LEFTOVERS = "CREATE TABLE leftovers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    amount DOUBLE,
+    city_id INT,
+    product_id UUID,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (city_id) REFERENCES cities(id));";
 }
