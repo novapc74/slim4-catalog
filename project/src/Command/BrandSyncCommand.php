@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Models\Brand;
 use App\Traits\HumanSizeCounterTrait;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command;
 use App\Service\Command\ProductSync\ProductDto;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -13,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BrandSyncCommand extends Command
 {
     use HumanSizeCounterTrait;
+
+    private static array $slugCollection = [];
 
     protected function configure(): void
     {
@@ -45,7 +48,10 @@ class BrandSyncCommand extends Command
             }
 
             $resolvedBrands[] = $brand;
-            $brandCollection[] = ['title' => $brand];
+            $brandCollection[] = [
+                'title' => $brand,
+                'slug' => self::getSlug($brand),
+            ];
         }
 
         unset($resolvedBrands);
@@ -59,5 +65,24 @@ class BrandSyncCommand extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    public static function getSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        if (!in_array($slug, self::$slugCollection)) {
+            self::$slugCollection[] = $slug;
+            return $slug;
+        }
+
+        $i = 1;
+        while (in_array($slug, self::$slugCollection)) {
+            $slug = $slug . '-' . $i;
+            $i++;
+        }
+
+        self::$slugCollection[] = $slug;
+
+        return $slug;
     }
 }

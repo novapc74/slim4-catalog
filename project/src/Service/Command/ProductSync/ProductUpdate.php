@@ -3,6 +3,7 @@
 namespace App\Service\Command\ProductSync;
 
 
+use Generator;
 use App\Models\Product;
 
 class ProductUpdate
@@ -19,7 +20,7 @@ class ProductUpdate
         Product::upsertProduct($productCollection);
     }
 
-    private static function getCollection(): \Generator
+    private static function getCollection(): Generator
     {
         foreach (self::getDataFromFile() ?? [] as $item) {
             yield $item;

@@ -27,4 +27,9 @@ class ProductProperty extends Model
     {
         return $this->belongsTo(Property::class);
     }
+
+    public static function upsertProductProperty(array $collection): int
+    {
+        return self::upsert($collection, ['id', 'product_id', 'property_id']);
+    }
 }

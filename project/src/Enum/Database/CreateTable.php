@@ -11,23 +11,20 @@ namespace App\Enum\Database;
 enum CreateTable: string
 {
     case CREATE_CITY = "CREATE TABLE cities (
-    id SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL,
-    slug VARCHAR(50) NOT NULL UNIQUE)";
+    slug VARCHAR(50) NOT NULL UNIQUE);";
 
     case CREATE_BRAND = "CREATE TABLE brands (
-    id SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL,
-    slug VARCHAR(50) NOT NULL UNIQUE)";
-    case CREATE_MEASURE = "CREATE TABLE measures (
-    id SMALLINT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL UNIQUE);";
+    slug VARCHAR(50) NOT NULL UNIQUE);";
     case CREATE_PRICE_TYPE = "CREATE TABLE price_types(
-    id    SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    id    INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(50) NOT NULL UNIQUE,
     slug  VARCHAR(50) NOT NULL UNIQUE);";
     case CREATE_PROPERTY = "CREATE TABLE properties (
-    id SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL UNIQUE,
     measure VARCHAR(255),
     is_invisible TINYINT(1) NOT NULL DEFAULT 0);";
@@ -38,18 +35,17 @@ enum CreateTable: string
     parent_category_id UUID,
     FOREIGN KEY (parent_category_id) REFERENCES categories(id));";
     case CREATE_PRODUCT_IDENTIFIER = "CREATE TABLE product_identifiers (
-    id SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     shop_code VARCHAR(25) UNIQUE,
     sku VARCHAR(50),
-    description TEXT
-);";
+    description TEXT);";
     case CREATE_PRODUCT = "CREATE TABLE products (
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
-    brand_id SMALLINT,
+    brand_id INT,
     category_id UUID,
-    product_identifier_id SMALLINT,
+    product_identifier_id INT,
     FOREIGN KEY (brand_id) REFERENCES brands(id),
     FOREIGN KEY (category_id) REFERENCES categories(id),
     FOREIGN KEY (product_identifier_id) REFERENCES product_identifiers(id));";
@@ -58,16 +54,15 @@ enum CreateTable: string
     value INT NOT NULL,
     product_id UUID,
     FOREIGN KEY (product_id) REFERENCES products(id),
-    city_id SMALLINT,
+    city_id INT,
     FOREIGN KEY (city_id) REFERENCES cities(id),
-    price_type_id SMALLINT,
-    FOREIGN KEY (price_type_id) REFERENCES price_types(id))";
+    price_type_id INT,
+    FOREIGN KEY (price_type_id) REFERENCES price_types(id));";
     case CREATE_PRODUCT_PROPERTY = "CREATE TABLE product_properties (
-    id SMALLINT AUTO_INCREMENT PRIMARY KEY,
-    value VARCHAR(50),
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    value VARCHAR(255),
     product_id UUID,
     FOREIGN KEY (product_id) REFERENCES products(id),
-    property_id SMALLINT,
-    FOREIGN KEY (property_id) REFERENCES properties(id)
-)";
+    property_id INT,
+    FOREIGN KEY (property_id) REFERENCES properties(id));";
 }
