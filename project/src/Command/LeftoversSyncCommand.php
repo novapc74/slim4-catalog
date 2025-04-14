@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Models\Leftover;
-use App\Service\Command\SyncData\LeftoversSync;
-use App\Service\Command\SyncData\SyncEntityService;
 use App\Traits\HumanSizeCounterTrait;
 use Symfony\Component\Console\Command\Command;
+use App\Service\Command\SyncData\LeftoversSync;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
+use App\Service\Command\SyncData\SyncEntityService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\Command\LeftoversSync\LeftoversUpdate;
 
 #[AsCommand(name: 'app:sync-leftovers', description: 'Обновление остатков товаров по городам.')]
 class LeftoversSyncCommand extends Command
@@ -29,10 +28,10 @@ class LeftoversSyncCommand extends Command
 
         Leftover::truncateLeftovers();
 
-        $count = SyncEntityService::init(LeftoversSync::class)->update();
+        $count = SyncEntityService::update(new LeftoversSync());
 
         $io->success(sprintf(
-                'Обновили остатки в количестве: %s. Память: %s',
+                'Обновили цены в количестве: %s. Память: %s',
                 $count,
                 self::humanizeUsageMemory())
         );

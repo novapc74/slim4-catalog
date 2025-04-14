@@ -4,39 +4,28 @@ namespace App\Service\Command\SyncData;
 
 use Generator;
 
-class SyncEntityService
+final class SyncEntityService
 {
-    public function __construct(private readonly SyncDatabaseInterface $instance)
-    {
-    }
-
-    public static function init(string $classFqcn): self
-    {
-        $instance = new $classFqcn();
-
-        return new self($instance);
-    }
-
-    public function update(): ?int
+    public static function update(SyncDatabaseInterface $instance): ?int
     {
         $i = 0;
-        $fileName = $this->instance::getFileName();
+        $fileName = $instance::getFileName();
         if (!file_exists($fileName)) {
             return null;
         }
 
-        $classFqcn = $this->instance::getEntityFqcn();
+        $classFqcn = $instance::getEntityFqcn();
         $method = 'upsert' . class_basename($classFqcn);
         $collection = [];
 
         #TODO сделать обновление чанками, чтобы коллекция не превышала максимально допустимое для базы данных...
         foreach (self::getCollection($fileName) as $item) {
-            if (!$resolvedItems = $this->instance->getEntityItem($item)) {
+            if (!$resolvedItems = $instance->getEntityItem($item)) {
                 continue;
             }
 
             if (count($resolvedItems) > 1) {
-                $this->instance::getEntityFqcn()::$method($resolvedItems);
+                $instance::getEntityFqcn()::$method($resolvedItems);
                 $i += count($resolvedItems);
                 continue;
             }
@@ -46,7 +35,7 @@ class SyncEntityService
 
         if (count($collection)) {
             $i += count($collection);
-            $this->instance::getEntityFqcn()::$method($collection);
+            $instance::getEntityFqcn()::$method($collection);
         }
 
         return $i;

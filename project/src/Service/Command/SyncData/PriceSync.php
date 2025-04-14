@@ -21,14 +21,14 @@ class PriceSync implements SyncDatabaseInterface
             : null;
     }
 
-    public function getEntityItem(array $data): ?array
+    public static function getEntityItem(array $data): ?array
     {
         foreach ($data['data'] as $item) {
             $productId = $data['УникальныйИдентификатор'] ?? null;
 
             if ($productId && $productId = Product::query()->where('id', $productId)->value('id')) {
                 $item['product_id'] = $productId;
-                if ($priceData = $this->getPriceData($item)) {
+                if ($priceData = self::getPriceData($item)) {
                     $collection[] = $priceData;
                 }
             }
@@ -72,7 +72,7 @@ class PriceSync implements SyncDatabaseInterface
         return [self::getCitySlug($cityName), self::getPriceTypeSlug($priceTypeName)];
     }
 
-    private function getPriceData(array $item): ?array
+    private static function getPriceData(array $item): ?array
     {
         [$citySlug, $priceTypeSlug] = self::denormalizePriceItem($item);
 

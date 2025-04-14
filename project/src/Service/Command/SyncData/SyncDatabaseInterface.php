@@ -8,5 +8,5 @@ interface SyncDatabaseInterface
 
     public static function getFileName(): ?string;
 
-    public function getEntityItem(array $data): ?array;
+    public static function getEntityItem(array $data): ?array;
 }

@@ -21,14 +21,14 @@ class LeftoversSync implements SyncDatabaseInterface
             : null;
     }
 
-    public function getEntityItem(array $data): ?array
+    public static function getEntityItem(array $data): ?array
     {
         foreach ($data['bases'] as $item) {
             $productId = $data['УникальныйИдентификатор'] ?? null;
 
             if ($productId && $productId = Product::query()->where('id', $productId)->value('id')) {
                 $item['product_id'] = $productId;
-                if ($priceData = $this->getLeftoverData($item)) {
+                if ($priceData = self::getLeftoverData($item)) {
                     $collection[] = $priceData;
                 }
             }

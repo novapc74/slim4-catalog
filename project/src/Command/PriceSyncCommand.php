@@ -28,7 +28,7 @@ class PriceSyncCommand extends Command
 
         Price::truncatePrice();
 
-        $priceCount = SyncEntityService::init(PriceSync::class)->update();
+        $priceCount = SyncEntityService::update(new PriceSync());
 
         $io->success(sprintf(
                 'Обновили/добавили цен для товара в количестве - %s. Память - %s',
