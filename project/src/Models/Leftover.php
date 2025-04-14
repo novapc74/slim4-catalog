@@ -29,7 +29,7 @@ class Leftover extends Model
         self::truncate();
     }
 
-    public static function upsertLeftovers($sortedCategories): int
+    public static function upsertLeftover($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id', 'product_id', 'city_id']);
     }

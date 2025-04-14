@@ -44,7 +44,7 @@ class SyncEntityService
             $collection[] = $resolvedItems[0];
         }
 
-        if (count($collection) > 0) {
+        if (count($collection)) {
             $i += count($collection);
             $this->instance::getEntityFqcn()::$method($collection);
         }
