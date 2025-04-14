@@ -2,9 +2,9 @@
 
 namespace App\Service\Command\LeftoversSync;
 
-use App\Models\Leftover;
-use App\Models\Product;
 use Generator;
+use App\Models\Product;
+use App\Models\Leftover;
 
 class LeftoversUpdate
 {
@@ -52,5 +52,4 @@ class LeftoversUpdate
 
         return json_decode($oldData, true);
     }
-
 }

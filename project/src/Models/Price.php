@@ -26,6 +26,11 @@ class Price extends Model
         'city_id',
     ];
 
+    public static function truncatePrice(): void
+    {
+        self::truncate();
+    }
+
     public static function upsertPrice($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id', 'price_type_id', 'product_id', 'city_id']);

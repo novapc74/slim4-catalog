@@ -6,14 +6,15 @@ namespace App\Command;
 
 use App\Models\Price;
 use App\Traits\HumanSizeCounterTrait;
-use App\Service\Command\PriceSync\PriceSync;
+use App\Service\Command\SyncData\PriceSync;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
+use App\Service\Command\SyncData\SyncEntityService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:sync_price', description: 'Обновление цен товаров по городам и типам цен.')]
+#[AsCommand(name: 'app:sync-price', description: 'Обновление цен товаров по городам и типам цен.')]
 class PriceSyncCommand extends Command
 {
     use HumanSizeCounterTrait;
@@ -25,9 +26,9 @@ class PriceSyncCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Обновление цен товаров.');
 
-        Price::truncate();
+        Price::truncatePrice();
 
-        $priceCount = PriceSync::execute();
+        $priceCount = SyncEntityService::init(PriceSync::class)->update();
 
         $io->success(sprintf(
                 'Обновили/добавили цен для товара в количестве - %s. Память - %s',
