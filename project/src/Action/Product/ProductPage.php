@@ -15,7 +15,8 @@ class ProductPage extends AbstractAction
     protected function action(): ResponseInterface
     {
         $slug = $this->args['slug'];
+        $data = ProductService::new()->getProduct(slug: $slug);
 
-        return $this->jsonResponse(ProductService::new()->getProduct($slug));
+        return $this->jsonResponse($data);
     }
 }
