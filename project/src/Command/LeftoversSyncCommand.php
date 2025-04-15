@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Command;
 
 use App\Models\Leftover;
@@ -21,8 +19,7 @@ class LeftoversSyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', -1);
-
+        $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
         $io->title('Обновление цен товаров.');
 
@@ -31,9 +28,11 @@ class LeftoversSyncCommand extends Command
         $count = SyncEntityService::update(new LeftoversSync());
 
         $io->success(sprintf(
-                'Обновили цены в количестве: %s. Память: %s',
+                'Остатки: %s. Память: %s. Время: %s',
                 $count,
-                self::humanizeUsageMemory())
+                self::humanizeUsageMemory(true),
+                self::getExecutionTime($start)
+            )
         );
 
         return Command::SUCCESS;

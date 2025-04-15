@@ -2,99 +2,36 @@
 
 namespace App\Command;
 
-use App\Models\Brand;
-use App\Service\Command\SyncData\BrandSync;
-use App\Service\Command\SyncData\SyncEntityService;
 use App\Traits\HumanSizeCounterTrait;
-use Illuminate\Support\Str;
+use App\Service\Command\SyncData\BrandSync;
 use Symfony\Component\Console\Command\Command;
-use App\Service\Command\ProductSync\ProductDto;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use App\Service\Command\SyncData\SyncEntityService;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'app:sync-brands', description: 'Обновление брендов.')]
 class BrandSyncCommand extends Command
 {
     use HumanSizeCounterTrait;
-
-    private static array $slugCollection = [];
-
-    protected function configure(): void
-    {
-        parent::configure();
-
-        $this->setName('app:sync-brands');
-        $this->setDescription('Создание / обновление брендов из файла товаров.');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', -1);
+        ini_set('memory_limit', '256M');
+        $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
-
         $io->title('Создаем, обновляем бренды товаров.');
 
         $count = SyncEntityService::update(new BrandSync());
 
         $io->success(sprintf(
-                'Обновили/добавили брендов в количестве - %s. Память - %s',
+                'Брендов: %s. Память:%s. Время: %s.',
                 $count,
-                self::humanizeUsageMemory())
+                self::humanizeUsageMemory(true),
+                self::getExecutionTime($start)
+            )
         );
 
         return Command::SUCCESS;
-
-        $data = file_get_contents(__DIR__ . '/../../var/data/products.json');
-        $collection = json_decode($data, true);
-
-        $brandCollection = [];
-        $resolvedBrands = [];
-        foreach ($collection as $item) {
-
-            if (!$brand = ProductDto::new($item)->getBrandTitle()) {
-                continue;
-            }
-
-            if (in_array($brand, $resolvedBrands)) {
-                continue;
-            }
-
-            $resolvedBrands[] = $brand;
-            $brandCollection[] = [
-                'title' => $brand,
-                'slug' => self::getSlug($brand),
-            ];
-        }
-
-        unset($resolvedBrands);
-
-        [] === $brandCollection ?: Brand::upsertBrand($brandCollection);
-
-        $io->success(sprintf(
-                'Обновили/добавили брендов в количестве - %s. Память - %s',
-                count($brandCollection),
-                self::humanizeUsageMemory())
-        );
-
-        return Command::SUCCESS;
-    }
-
-    public static function getSlug(string $title): string
-    {
-        $slug = Str::slug($title);
-        if (!in_array($slug, self::$slugCollection)) {
-            self::$slugCollection[] = $slug;
-            return $slug;
-        }
-
-        $i = 1;
-        while (in_array($slug, self::$slugCollection)) {
-            $slug = $slug . '-' . $i;
-            $i++;
-        }
-
-        self::$slugCollection[] = $slug;
-
-        return $slug;
     }
 }

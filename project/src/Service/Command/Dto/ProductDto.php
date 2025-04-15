@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Service\Command\ProductSync;
+namespace App\Service\Command\Dto;
 
 use App\Models\Brand;
 use App\Models\Category;
-use Illuminate\Support\Str;
 use App\Models\ProductIdentifier;
+use App\Traits\GenerateSlagTrait;
+use App\Service\Command\Interface\GenerateSlugInterface;
 
-class ProductDto
+class ProductDto implements GenerateSlugInterface
 {
-    private array $slugCollection = [];
+    use GenerateSlagTrait;
     private array $productData;
 
     public function __construct(mixed $productData)
@@ -29,7 +30,7 @@ class ProductDto
         return [
             'id' => self::getProductUuid(),
             'title' => self::getProductTitle(),
-            'slug' => self::getSlug(self::getProductTitle()),
+            'slug' => self::generateSlug(self::getProductTitle()),
             'category_id' => self::getCategoryId() ?? null,
             'brand_id' => self::getBrandId() ?? null,
             'product_identifier_id' => self::getProductIdentifierId() ?? null
@@ -47,24 +48,6 @@ class ProductDto
         return $this->productData['УникальныйИдентификатор'];
     }
 
-    public function getSlug(string $title): string
-    {
-        $slug = Str::slug($title);
-        if (!in_array($slug, $this->slugCollection)) {
-            $this->slugCollection[] = $slug;
-            return $slug;
-        }
-
-        $i = 1;
-        while (in_array($slug, $this->slugCollection)) {
-            $slug = $slug . '-' . $i;
-            $i++;
-        }
-
-        $this->slugCollection[] = $slug;
-
-        return $slug;
-    }
 
     public function getBrandId(): ?int
     {
@@ -120,7 +103,7 @@ class ProductDto
             if(count($data) === 1) {
                 $properties[]= [
                     'title' => $property,
-                    'measure_id' => null,
+                    'measure' => null,
                 ];
 
                 continue;

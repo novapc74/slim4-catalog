@@ -2,8 +2,8 @@
 
 namespace App\Service\Command\SyncData;
 
-use App\Service\Command\Interface\SyncDatabaseInterface;
 use Generator;
+use App\Service\Command\Interface\SyncDatabaseInterface;
 
 final class SyncEntityService
 {

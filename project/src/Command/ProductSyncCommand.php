@@ -2,42 +2,36 @@
 
 namespace App\Command;
 
-use App\Models\Brand;
-use App\Service\Command\ProductSync\ProductUpdate;
 use App\Traits\HumanSizeCounterTrait;
+use App\Service\Command\SyncData\SyncProduct;
 use Symfony\Component\Console\Command\Command;
-use App\Service\Command\ProductSync\ProductDto;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
+use App\Service\Command\SyncData\SyncEntityService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'app:sync-product', description: 'Обновление товаров.')]
 class ProductSyncCommand extends Command
 {
     use HumanSizeCounterTrait;
 
-    protected function configure(): void
-    {
-        parent::configure();
-
-        $this->setName('app:sync-product');
-        $this->setDescription('Синхронизируем товары.');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', -1);
+        ini_set('memory_limit', '256M');
 
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
-        $io->title('Создаем, обновляем товары.');
+        $io->title('Обновляем товары.');
 
-        ProductUpdate::execute();
+        $count = SyncEntityService::update(new SyncProduct());
 
         $io->success(sprintf(
-                'Сохранили категории, хеш-товары, остатки, цены. Память: %s, Время: %s',
-                self::humanizeUsageMemory(),
-                self::getExecutionTime($start))
+                'Товары: %s. Память: %s. Время: %s',
+                $count,
+                self::humanizeUsageMemory(true),
+                self::getExecutionTime($start)
+            )
         );
 
         return Command::SUCCESS;

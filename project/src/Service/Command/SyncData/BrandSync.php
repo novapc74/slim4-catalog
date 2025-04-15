@@ -31,6 +31,8 @@ class BrandSync implements SyncDatabaseInterface, GenerateSlugInterface
                 return null;
             }
 
+            $title = mb_ucfirst(mb_strtolower($title));
+
             if (in_array($title, self::getResolvedTitles())) {
                 return null;
             }

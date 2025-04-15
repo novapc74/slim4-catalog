@@ -56,7 +56,7 @@ trait HumanSizeCounterTrait
 
     public function humanizeUsageMemory(bool $realUsage = false): string
     {
-        $memoryUsage = memory_get_usage($realUsage);
+        $memoryUsage = memory_get_peak_usage($realUsage);
 
         return match (true) {
             $memoryUsage < 1024 => "{$memoryUsage} bytes",

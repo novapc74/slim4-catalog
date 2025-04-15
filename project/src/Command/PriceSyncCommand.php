@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Command;
 
 use App\Models\Price;
@@ -21,19 +19,22 @@ class PriceSyncCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        ini_set('memory_limit', -1);
+        ini_set('memory_limit', '64M');
 
+        $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
         $io->title('Обновление цен товаров.');
 
         Price::truncatePrice();
 
-        $priceCount = SyncEntityService::update(new PriceSync());
+        $count = SyncEntityService::update(new PriceSync());
 
         $io->success(sprintf(
-                'Обновили/добавили цен для товара в количестве - %s. Память - %s',
-                $priceCount,
-                self::humanizeUsageMemory())
+                'Цены: %s. Память: %s. Время: %s',
+                $count,
+                self::humanizeUsageMemory(true),
+                self::getExecutionTime($start)
+            )
         );
 
         return Command::SUCCESS;

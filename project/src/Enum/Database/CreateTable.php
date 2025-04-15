@@ -53,23 +53,23 @@ enum CreateTable: string
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     value INT NOT NULL,
     product_id UUID,
-    FOREIGN KEY (product_id) REFERENCES products(id),
     city_id INT,
-    FOREIGN KEY (city_id) REFERENCES cities(id),
     price_type_id INT,
-    FOREIGN KEY (price_type_id) REFERENCES price_types(id));";
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (city_id) REFERENCES cities(id) ON DELETE CASCADE,
+    FOREIGN KEY (price_type_id) REFERENCES price_types(id) ON DELETE CASCADE);";
     case CREATE_PRODUCT_PROPERTY = "CREATE TABLE product_properties (
     id INT AUTO_INCREMENT PRIMARY KEY,
     value VARCHAR(255),
     product_id UUID,
-    FOREIGN KEY (product_id) REFERENCES products(id),
     property_id INT,
-    FOREIGN KEY (property_id) REFERENCES properties(id));";
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE);";
     case CREATE_LEFTOVERS = "CREATE TABLE leftovers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     amount DOUBLE,
     city_id INT,
     product_id UUID,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (city_id) REFERENCES cities(id));";
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (city_id) REFERENCES cities(id) ON DELETE CASCADE);";
 }

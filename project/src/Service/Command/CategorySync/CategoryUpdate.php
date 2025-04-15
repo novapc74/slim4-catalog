@@ -68,7 +68,6 @@ class CategoryUpdate
 
                 unset(self::$idCategories[$category['id']]);
             }
-
         }
     }
 
