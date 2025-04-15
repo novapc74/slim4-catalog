@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Models\Brand;
+use App\Service\Command\SyncData\BrandSync;
+use App\Service\Command\SyncData\SyncEntityService;
 use App\Traits\HumanSizeCounterTrait;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command;
@@ -31,6 +33,16 @@ class BrandSyncCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Создаем, обновляем бренды товаров.');
+
+        $count = SyncEntityService::update(new BrandSync());
+
+        $io->success(sprintf(
+                'Обновили/добавили брендов в количестве - %s. Память - %s',
+                $count,
+                self::humanizeUsageMemory())
+        );
+
+        return Command::SUCCESS;
 
         $data = file_get_contents(__DIR__ . '/../../var/data/products.json');
         $collection = json_decode($data, true);

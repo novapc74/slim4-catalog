@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Price;
 use App\Models\PriceType;
 use App\Models\Product;
+use App\Service\Command\Interface\SyncDatabaseInterface;
 
 class PriceSync implements SyncDatabaseInterface
 {

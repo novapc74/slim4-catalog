@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Command\SyncData;
+namespace App\Service\Command\Interface;
 
 interface SyncDatabaseInterface
 {

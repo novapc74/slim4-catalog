@@ -2,6 +2,7 @@
 
 namespace App\Service\Command\SyncData;
 
+use App\Service\Command\Interface\SyncDatabaseInterface;
 use Generator;
 
 final class SyncEntityService
@@ -20,7 +21,7 @@ final class SyncEntityService
 
         #TODO сделать обновление чанками, чтобы коллекция не превышала максимально допустимое для базы данных...
         foreach (self::getCollection($fileName) as $item) {
-            if (!$resolvedItems = $instance->getEntityItem($item)) {
+            if (!$resolvedItems = $instance::getEntityItem($item)) {
                 continue;
             }
 

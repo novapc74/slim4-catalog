@@ -5,6 +5,7 @@ namespace App\Service\Command\SyncData;
 use App\Models\City;
 use App\Models\Leftover;
 use App\Models\Product;
+use App\Service\Command\Interface\SyncDatabaseInterface;
 
 class LeftoversSync implements SyncDatabaseInterface
 {
