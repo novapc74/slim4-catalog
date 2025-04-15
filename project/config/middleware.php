@@ -3,6 +3,7 @@
 use Slim\App;
 use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
+use App\Middleware\JsonExceptionHandler;
 
 return function (App $app) {
     $app->addBodyParsingMiddleware();
@@ -12,5 +13,7 @@ return function (App $app) {
     $logger = new Logger('app');
     $logger->pushHandler(new RotatingFileHandler(__DIR__ . '/../var/log/error.log', 0, Logger::ERROR));
 
-     $app->addErrorMiddleware(true,true,true, $logger);
+    $app->addErrorMiddleware(true, true, true, $logger);
+
+    $app->add(new JsonExceptionHandler());
 };

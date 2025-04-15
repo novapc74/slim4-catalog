@@ -12,10 +12,9 @@ final class JsonRenderer
             $status = 503;
         }
 
-        $data = is_array($data)
+        $data = is_array($data)  || is_object($data)
             ? json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR)
             : $data;
-
 
         $response->getBody()->write($data);
 

@@ -3,6 +3,8 @@
 namespace App\Action;
 
 use Exception;
+use App\Traits\CitySlugTrait;
+use App\Traits\SecretTokenTrait;
 use App\Renderer\JsonRenderer;
 use App\Traits\HumanSizeCounterTrait;
 use Psr\Http\Message\ResponseInterface;
@@ -12,6 +14,8 @@ use Symfony\Contracts\Cache\TagAwareCacheInterface;
 abstract class AbstractAction
 {
     use HumanSizeCounterTrait;
+    use CitySlugTrait;
+    use SecretTokenTrait;
 
     protected Request $request;
 
@@ -38,8 +42,8 @@ abstract class AbstractAction
 
     abstract protected function action(): ResponseInterface;
 
-    protected function jsonResponse(ResponseInterface $response, $data, int $status = 200): ResponseInterface
+    protected function jsonResponse($data, int $status = 200): ResponseInterface
     {
-        return JsonRenderer::json($response, $data, $status);
+        return JsonRenderer::json($this->response, $data, $status);
     }
 }

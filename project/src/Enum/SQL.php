@@ -4,6 +4,8 @@ namespace App\Enum;
 
 enum SQL: string
 {
+    case PRODUCT_BY_SLUG = 'product';
+    ####################################################################################################################
     case MAIN_CATEGORY = "SELECT c.slug, c.title, COUNT(ch.id) AS child_category_count FROM category AS c
                 LEFT JOIN category AS ch ON c.id = ch.parent_category_id
                 WHERE c.parent_category_id IS NULL

@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
+use Throwable;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\OutputStyle;
-use Throwable;
 
 trait RunCommandTrait
 {
