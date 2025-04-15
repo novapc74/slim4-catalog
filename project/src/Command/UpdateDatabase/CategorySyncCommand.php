@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\UpdateDatabase;
 
 use App\Service\Command\SyncData\CategorySync\CategoryUpdate;
 use App\Traits\HumanSizeCounterTrait;
@@ -19,7 +19,7 @@ class CategorySyncCommand extends Command
     {
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
-        $io->title('Обновляем категории');
+        $io->title('Категории товаров.');
 
         $result = CategoryUpdate::execute();
 

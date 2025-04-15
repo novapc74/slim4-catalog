@@ -6,7 +6,7 @@ use App\Models\Category;
 
 class CategoryUpdate
 {
-    private const FILE_PATH = __DIR__ . '/../../../../var/data/categories.json';
+    private const FILE_PATH = __DIR__ . '/../../../../../var/data/categories.json';
     private static array $idCategories = [];
     private static array $resolvedCategoriesId = [];
     private static array $sortedCategories = [];

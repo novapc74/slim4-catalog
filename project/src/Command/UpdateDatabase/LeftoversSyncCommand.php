@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\UpdateDatabase;
 
 use App\Models\Leftover;
 use App\Service\Command\SyncData\LeftoversSync;
@@ -21,7 +21,7 @@ class LeftoversSyncCommand extends Command
     {
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
-        $io->title('Обновление цен товаров.');
+        $io->title('Остатки товаров.');
 
         Leftover::truncateLeftovers();
 

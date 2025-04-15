@@ -27,6 +27,7 @@ class SaveRemoteDataCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        return Command::FAILURE;
         ini_set('memory_limit', '512M');
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
