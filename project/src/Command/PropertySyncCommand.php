@@ -3,12 +3,12 @@
 namespace App\Command;
 
 use App\Traits\HumanSizeCounterTrait;
-use App\Service\Command\SyncData\PropertySync;
+use App\Service\Command\SyncEntityService;
 use Symfony\Component\Console\Command\Command;
+use App\Service\Command\SyncData\PropertySync;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use App\Service\Command\SyncData\SyncEntityService;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'app:sync-property', description: 'Обновление свойств.')]

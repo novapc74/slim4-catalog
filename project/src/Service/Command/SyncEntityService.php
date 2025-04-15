@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Command\SyncData;
+namespace App\Service\Command;
 
-use Generator;
 use App\Service\Command\Interface\SyncDatabaseInterface;
+use Generator;
 
 final class SyncEntityService
 {
@@ -35,8 +35,8 @@ final class SyncEntityService
         }
 
         if (count($collection)) {
-            $i += count($collection);
             $instance::getEntityFqcn()::$method($collection);
+            $i += count($collection);
         }
 
         return $i;

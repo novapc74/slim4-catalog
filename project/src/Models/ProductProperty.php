@@ -32,4 +32,9 @@ class ProductProperty extends Model
     {
         return self::upsert($collection, ['id', 'product_id', 'property_id']);
     }
+
+    public static function truncateProductProperty(): void
+    {
+        self::truncate();
+    }
 }

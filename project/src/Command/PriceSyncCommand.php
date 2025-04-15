@@ -3,14 +3,14 @@
 namespace App\Command;
 
 use App\Models\Price;
-use App\Traits\HumanSizeCounterTrait;
 use App\Service\Command\SyncData\PriceSync;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Service\Command\SyncEntityService;
+use App\Traits\HumanSizeCounterTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
-use App\Service\Command\SyncData\SyncEntityService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:sync-price', description: 'Обновление цен товаров по городам и типам цен.')]
 class PriceSyncCommand extends Command

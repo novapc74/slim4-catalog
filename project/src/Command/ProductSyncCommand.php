@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
-use App\Traits\HumanSizeCounterTrait;
 use App\Service\Command\SyncData\SyncProduct;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Service\Command\SyncEntityService;
+use App\Traits\HumanSizeCounterTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
-use App\Service\Command\SyncData\SyncEntityService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:sync-product', description: 'Обновление товаров.')]
 class ProductSyncCommand extends Command

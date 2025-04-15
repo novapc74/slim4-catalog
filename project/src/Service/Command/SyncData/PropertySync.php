@@ -23,6 +23,7 @@ class PropertySync implements SyncDatabaseInterface
 
     public static function getEntityItem(array $data): ?array
     {
+        $collection = [];
         $resolvedProperty = [];
             foreach (ProductDto::new($data)->getProperties() as $property) {
                 if (in_array($property['title'], $resolvedProperty)) {
@@ -32,6 +33,6 @@ class PropertySync implements SyncDatabaseInterface
                 $collection[] = $property;
             }
 
-        return $collection ?? null;
+        return [] !== $collection ? array_values($collection) : null;
     }
 }

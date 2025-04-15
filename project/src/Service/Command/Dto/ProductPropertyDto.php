@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Command\ProductPropertySync;
+namespace App\Service\Command\Dto;
 
 use App\Models\Property;
 

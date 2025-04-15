@@ -2,13 +2,13 @@
 
 namespace App\Command;
 
+use App\Service\Command\SyncData\CategorySync\CategoryUpdate;
 use App\Traits\HumanSizeCounterTrait;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use App\Service\Command\CategorySync\CategoryUpdate;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:sync-categories', description: 'Обновление категорий.')]
 class CategorySyncCommand extends Command

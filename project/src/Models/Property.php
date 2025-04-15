@@ -12,11 +12,23 @@ class Property extends Model
 {
     public $timestamps = false;
     public $fillable = [
-        'title'
+        'id',
+        'title',
+        'measure',
+        'is_invisible'
     ];
 
     public static function upsertProperty(array $data): int
     {
-        return self::upsert($data, ['id', 'title', 'measure']);
+        $i = 0;
+        foreach ($data as $property) {
+            self::updateOrCreate(
+                ['title' => $property['title']],
+                $property
+            );
+            $i++;
+        }
+
+        return $i;
     }
 }

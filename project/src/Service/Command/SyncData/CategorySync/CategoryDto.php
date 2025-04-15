@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Command\CategorySync;
+namespace App\Service\Command\SyncData\CategorySync;
 
-use App\Traits\GenerateSlagTrait;
 use App\Service\Command\Interface\GenerateSlugInterface;
+use App\Traits\GenerateSlagTrait;
 
 class CategoryDto implements GenerateSlugInterface
 {

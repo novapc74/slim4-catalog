@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
+use App\Service\Command\SyncData\ProductIdentifierSync;
+use App\Service\Command\SyncEntityService;
 use App\Traits\HumanSizeCounterTrait;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
-use App\Service\Command\SyncData\SyncEntityService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\Command\SyncData\ProductIdentifierSync;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:sync-product-identifier', description: 'Обновление идентификаторов товаров.')]
 class ProductIdentifierSyncCommand extends Command

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Command\CategorySync;
+namespace App\Service\Command\SyncData\CategorySync;
 
 use App\Models\Category;
 
