@@ -5,14 +5,11 @@ namespace App\Service\Action\Product;
 use App\Traits\CitySlugTrait;
 use App\Exception\JsonException;
 use App\Enum\SQL\Product\ProductSql;
-use App\Traits\HumanSizeCounterTrait;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 final class ProductService
 {
     use CitySlugTrait;
-    use HumanSizeCounterTrait;
-
     private static Capsule $db;
 
     public function __construct()
@@ -28,7 +25,7 @@ final class ProductService
     /**
      * @throws JsonException
      */
-    public function getProduct(string $slug): array
+    public function getProduct(string $slug): object
     {
         $sql = ProductSql::PRODUCT_BY_SLUG->value;
 
@@ -44,12 +41,6 @@ final class ProductService
         $product->properties = json_decode($product->properties, true);
         $product->prices = json_decode($product->prices, true);
 
-        return [
-            'product' => $product,
-            'meta' => [
-                'peak_memory' => self::humanizeUsageMemory(true),
-                'city_slug' => self::citySlug(),
-            ],
-        ];
+        return $product;
     }
 }
