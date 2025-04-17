@@ -14,8 +14,7 @@ enum ProductSql: string
     
     SELECT c.id, c.title, c.slug, c.parent_category_id
     FROM categories c
-    INNER JOIN category_tree ct ON ct.parent_category_id = c.id
-)
+    INNER JOIN category_tree ct ON ct.parent_category_id = c.id)
 
     SELECT ct.title, ct.slug, COUNT(DISTINCT CASE WHEN cit.slug = :citySlug THEN p.id END) AS product_count
     FROM category_tree ct

@@ -13,16 +13,15 @@ class ProductBreadcrumbs
 
     public static function breadcrumbs(string $slug): array
     {
-        $product = Product::findBySlug($slug);
-        if (!$product) {
+        if (!$product = Product::findBySlug($slug)) {
             return [];
         }
 
-        if (!$categoryId = $product->category_id) {
+        if (!$productCategoryId = $product->category_id) {
             return [];
         }
 
-        return self::getBreadcrumbs($categoryId);
+        return self::getBreadcrumbs($productCategoryId);
     }
 
     private static function getBreadcrumbs(string $categoryId): array
@@ -40,9 +39,12 @@ class ProductBreadcrumbs
 
         foreach ($breadcrumbs as &$category) {
             $category = (array)$category;
-            if (0 === $category['product_count']) {
-                unset($category['product_count']);
+
+            if (!empty($category['product_count'])) {
+                continue;
             }
+
+            unset($category['product_count']);
         }
 
         return $breadcrumbs;

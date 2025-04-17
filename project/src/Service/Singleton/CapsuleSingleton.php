@@ -20,7 +20,7 @@ class CapsuleSingleton
     /**
      * Одиночки не должны быть клонируемыми.
      */
-    protected function __clone()
+    protected function __clone(): void
     {
     }
 
@@ -28,7 +28,7 @@ class CapsuleSingleton
      * Одиночки не должны быть восстанавливаемыми из строк.
      * @throws Exception
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new Exception("Unable to deserialize singleton.");
     }
