@@ -54,7 +54,7 @@ trait HumanSizeCounterTrait
         return -microtime(true);
     }
 
-    public function humanizeUsageMemory(bool $realUsage = false): string
+    public static function humanizeUsageMemory(bool $realUsage = false): string
     {
         $memoryUsage = memory_get_peak_usage($realUsage);
 

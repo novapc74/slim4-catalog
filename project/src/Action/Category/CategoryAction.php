@@ -11,16 +11,15 @@ final class CategoryAction extends AbstractAction
     public function action(): ResponseInterface
     {
         $category = Category::query()
-            ->where('slug', $this->args)
+            ->where('slug', $this->args['slug'])
             ->select('id', 'title', 'slug')
             ->first()
             ->toArray();
 
         $data = [
             'category' => $category,
-            'memory' => self::humanizeUsageMemory(),
         ];
 
-        return $this->jsonResponse($this->response, $data);
+        return $this->jsonResponse($data);
     }
 }

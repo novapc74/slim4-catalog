@@ -3,35 +3,37 @@
 namespace App\Service\Action\Product;
 
 use App\Traits\CitySlugTrait;
-use App\Exception\JsonException;
-use App\Enum\SQL\Product\ProductSql;
-use App\Service\Singleton\CapsuleSingleton;
+use App\Traits\HumanSizeCounterTrait;
+use Symfony\Component\Cache\CacheItem;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 final class ProductService
 {
     use CitySlugTrait;
+    use HumanSizeCounterTrait;
 
     /**
-     * @throws JsonException
+     * @throws InvalidArgumentException
      */
-    public static function product(string $slug): object
+    public static function product(TagAwareCacheInterface $cache, string $productSlug): string
     {
-        $sql = ProductSql::PRODUCT_BY_SLUG->value;
+        $citySlug = self::citySlug();
 
-        $capsule = CapsuleSingleton::capsule();
+        return $cache->get("product-$productSlug-$citySlug", function (CacheItem $item) use ($productSlug, $citySlug) {
+            $item->expiresAfter(86400);
+            $item->tag('product-city');
 
-        $sqlParams = [
-            'productSlug' => $slug,
-            'citySlug' => self::citySlug(),
-        ];
+            $data =  [
+                'breadcrumbs' => ProductBreadcrumbs::breadcrumbs(slug: $productSlug),
+                'product' => ProductPage::product(slug: $productSlug),
+                'meta' => [
+                    'peak_memory' => self::humanizeUsageMemory(true),
+                    'city_slug' => self::citySlug(),
+                ],
+            ];
 
-        if (!$product = $capsule::select($sql, $sqlParams)[0] ?? null) {
-            throw new JsonException(['error' => 'Product not found'], 404);
-        }
-
-        $product->properties = json_decode($product->properties, true);
-        $product->prices = json_decode($product->prices, true);
-
-        return $product;
+            return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR);
+        });
     }
 }
