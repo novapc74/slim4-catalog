@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @mixin Builder
+ * @property string $id
+ * @property string $title
+ * @property string $slug
  */
 class Category extends Model
 {
@@ -53,7 +56,7 @@ class Category extends Model
         return $this->hasMany(Category::class);
     }
 
-    public function Products(): HasMany
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @mixin Builder
+ * @property string $category_id
  */
 class Product extends Model
 {
@@ -67,5 +68,10 @@ class Product extends Model
     public static function upsertProduct($sortedCategories): int
     {
         return self::upsert($sortedCategories, ['id', 'slug']);
+    }
+
+    public static function findBySlug(string $slug): ?Product
+    {
+        return self::where('slug', $slug)->first();
     }
 }

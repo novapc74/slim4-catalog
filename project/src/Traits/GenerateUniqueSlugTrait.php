@@ -4,9 +4,6 @@ namespace App\Traits;
 
 use Illuminate\Support\Str;
 
-/**
- * @method static where(string $string, string $slug)
- */
 trait GenerateUniqueSlugTrait
 {
     public static function bootGenerateUniqueSlugTrait(): void

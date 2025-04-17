@@ -10,6 +10,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 final class ProductService
 {
     use CitySlugTrait;
+
     private static Capsule $db;
 
     public function __construct()

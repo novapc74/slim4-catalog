@@ -4,6 +4,25 @@ namespace App\Enum\SQL\Product;
 
 enum ProductSql: string
 {
+    case PRODUCT_BREADCRUMBS = "
+    WITH RECURSIVE category_tree AS (
+    SELECT id, title, slug, parent_category_id
+    FROM categories
+    WHERE id = :categoryId
+    
+    UNION ALL
+    
+    SELECT c.id, c.title, c.slug, c.parent_category_id
+    FROM categories c
+    INNER JOIN category_tree ct ON ct.parent_category_id = c.id
+)
+
+    SELECT ct.title, ct.slug, COUNT(DISTINCT CASE WHEN cit.slug = :citySlug THEN p.id END) AS product_count
+    FROM category_tree ct
+    LEFT JOIN products p ON p.category_id = ct.id
+    LEFT JOIN prices pr ON pr.product_id = p.id
+    LEFT JOIN cities cit ON pr.city_id = cit.id
+    GROUP BY ct.title, ct.slug;";
     case PRODUCT_BY_SLUG = "SELECT
     p.id,
     p.title,

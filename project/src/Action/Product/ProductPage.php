@@ -7,6 +7,7 @@ use App\Exception\JsonException;
 use App\Traits\HumanSizeCounterTrait;
 use Psr\Http\Message\ResponseInterface;
 use App\Service\Action\Product\ProductService;
+use App\Service\Action\Product\ProductBreadcrumbs;
 
 class ProductPage extends AbstractAction
 {
@@ -19,7 +20,7 @@ class ProductPage extends AbstractAction
         $slug = $this->args['slug'];
 
         $data = [
-            'category' => '',
+            'breadcrumbs' => ProductBreadcrumbs::breadcrumbs($slug),
             'product' => ProductService::new()->getProduct(slug: $slug),
             'meta' => [
                 'peak_memory' => self::humanizeUsageMemory(true),
