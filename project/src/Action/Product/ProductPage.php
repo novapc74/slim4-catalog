@@ -21,7 +21,7 @@ class ProductPage extends AbstractAction
 
         $data = [
             'breadcrumbs' => ProductBreadcrumbs::breadcrumbs($slug),
-            'product' => ProductService::new()->getProduct(slug: $slug),
+            'product' => ProductService::product(slug: $slug),
             'meta' => [
                 'peak_memory' => self::humanizeUsageMemory(true),
                 'city_slug' => self::citySlug(),
