@@ -20,16 +20,20 @@ class ProductPropertyDto
     {
         $propertyTitle = explode(',', $this->productPropertyItem['Имя'])[0] ?? trim($this->productPropertyItem['Имя']);
 
-        if (!$property_id = Property::query()
+        if (!$propertyId = Property::query()
             ->where('title', trim($propertyTitle))
             ->where('is_invisible', false)->value('id')) {
             return null;
         }
 
+        if (!$value = self::getValue()) {
+            return null;
+        }
+
         return [
             'product_id' => $this->productId,
-            'property_id' => $property_id,
-            'value' => self::getValue(),
+            'property_id' => $propertyId,
+            'value' => $value,
         ];
     }
 
