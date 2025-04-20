@@ -33,7 +33,7 @@ class ProductPropertySync implements SyncDatabaseInterface
         foreach ($data['ОсновныеЕдиницыИзмерения'] as $productItem) {
             if (!$productProperty = ProductPropertyDto::new($productId, $productItem)->execute()) {
 
-                return null;
+                continue;
             }
 
             $collection[] = $productProperty;
@@ -42,7 +42,7 @@ class ProductPropertySync implements SyncDatabaseInterface
         foreach ($data['ДополнительныеРеквизиты'] as $productItem) {
             if (!$productProperty = ProductPropertyDto::new($productId, $productItem)->execute()) {
 
-                return null;
+                continue;
             }
 
             $collection[] = $productProperty;

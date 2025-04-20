@@ -47,7 +47,7 @@ enum ProductSql: string
     ) AS prices
 FROM products p
 LEFT JOIN brands br ON p.brand_id = br.id
-LEFT JOIN product_properties prp ON p.id = prp.product_id AND prp.value IS NOT NULL
+LEFT JOIN product_properties prp ON p.id = prp.product_id -- AND prp.value IS NOT NULL
 INNER JOIN properties pr ON pr.id = prp.property_id AND pr.is_invisible = FALSE
 LEFT JOIN prices pri ON pri.product_id = p.id 
 INNER JOIN cities ci ON pri.city_id = ci.id
