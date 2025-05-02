@@ -29,6 +29,10 @@ enum ProductSql: string
     br.title as brand,
     pd.shop_code,
     pd.sku,
+    (SELECT pp_1.value FROM product_properties pp_1
+    LEFT JOIN products p_1 ON pp_1.product_id = p_1.id
+    LEFT JOIN properties pr_1 ON pp_1.property_id = pr_1.id
+    WHERE p_1.id = p.id AND pr_1.title = 'Коэффициент для пересчета в м2') AS square_ratio,
     pd.description,
     JSON_ARRAYAGG(
         DISTINCT JSON_OBJECT(

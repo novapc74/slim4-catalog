@@ -7,56 +7,66 @@ use Generator;
 
 final class SyncEntityService
 {
-    public static function update(SyncDatabaseInterface $instance): ?int
+    private const CHUNK_SIZE = 1000;
+
+    private static function getJsonChunk(string $fileName, int $chunkSize): Generator
     {
-        $i = 0;
-        $fileName = $instance::getFileName();
         if (!file_exists($fileName)) {
-            return null;
+            yield [];
+            return;
         }
 
+        $jsonData = file_get_contents($fileName);
+        $dataArray = json_decode($jsonData, true);
+
+        if (!is_array($dataArray)) {
+            yield [];
+            return;
+        }
+
+        $chunk = [];
+        foreach ($dataArray as $item) {
+            $chunk[] = $item;
+
+            if (count($chunk) >= $chunkSize) {
+                yield $chunk;
+                $chunk = [];
+            }
+        }
+
+        if (count($chunk) > 0) {
+            yield $chunk;
+        }
+    }
+
+    public static function update(SyncDatabaseInterface $instance): int
+    {
+        $fileName = $instance::getFileName();
         $classFqcn = $instance::getEntityFqcn();
         $method = 'upsert' . class_basename($classFqcn);
-        $collection = [];
 
-        #TODO сделать обновление чанками, чтобы коллекция не превышала максимально допустимое для базы данных...
-        foreach (self::getCollection($fileName) as $item) {
-            if (!$resolvedItems = $instance::getEntityItem($item)) {
-                continue;
+        $i = 0;
+        foreach (self::getJsonChunk($fileName, self::CHUNK_SIZE) as $chunks) {
+            $collection = [];
+            foreach ($chunks as $item) {
+                if (!$resolvedItems = $instance::getEntityItem($item)) {
+                    continue;
+                }
+
+                if (count($resolvedItems) > 1) {
+                    $collection = array_merge($collection, $resolvedItems);
+                    $i += count($resolvedItems);
+                    continue;
+                }
+
+                $collection[] = $resolvedItems[0];
+                $i++;
             }
 
-            if (count($resolvedItems) > 1) {
-                $instance::getEntityFqcn()::$method($resolvedItems);
-                $i += count($resolvedItems);
-                continue;
-            }
-
-            $collection[] = $resolvedItems[0];
-        }
-
-        if (count($collection)) {
             $instance::getEntityFqcn()::$method($collection);
-            $i += count($collection);
+
         }
 
         return $i;
-    }
-
-    private static function getCollection(string $fileName): Generator
-    {
-        foreach (self::getDataFromFile($fileName) ?? [] as $item) {
-            yield $item;
-        }
-    }
-
-    private static function getDataFromFile(string $fileName): ?array
-    {
-        if (!file_exists($fileName)) {
-            return null;
-        }
-
-        $oldData = file_get_contents($fileName);
-
-        return json_decode($oldData, true);
     }
 }

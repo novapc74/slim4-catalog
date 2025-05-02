@@ -6,6 +6,8 @@ use App\Models\Property;
 
 class ProductPropertyDto
 {
+    private string $propertyTitle;
+
     public function __construct(private readonly string $productId,
                                 private readonly array  $productPropertyItem)
     {
@@ -18,10 +20,10 @@ class ProductPropertyDto
 
     public function execute(): ?array
     {
-        $propertyTitle = explode(',', $this->productPropertyItem['Имя'])[0] ?? trim($this->productPropertyItem['Имя']);
+        $this->propertyTitle = explode(',', $this->productPropertyItem['Имя'])[0] ?? trim($this->productPropertyItem['Имя']);
 
         if (!$propertyId = Property::query()
-            ->where('title', trim($propertyTitle))
+            ->where('title', trim($this->propertyTitle))
             ->where('is_invisible', false)->value('id')) {
             return null;
         }
@@ -43,21 +45,22 @@ class ProductPropertyDto
             return null;
         }
 
-        if (strpos($this->productPropertyItem['Значение'], ',')) {
-            $value = str_replace(',', '.', $this->productPropertyItem['Значение']);
-
-            return trim($value);
-        }
-
-        if (strpos($this->productPropertyItem['Значение'], ':')) {
+        $isSquareRatioProperty = $this->propertyTitle == 'Коэффициент для пересчета в м2';
+        if (str_contains($this->productPropertyItem['Значение'], ':') && $isSquareRatioProperty) {
             $data = explode(':', $this->productPropertyItem['Значение']);
 
             $a = (float)str_replace(',', '.', $data[0]);
             $b = (float)str_replace(',', '.', $data[1]);
 
-            if ($b != 0) {
-                return $a / $b;
+            if ($b > 0) {
+                return (string)($a / $b);
             }
+        }
+
+        if (strpos($this->productPropertyItem['Значение'], ',')) {
+            $value = str_replace(',', '.', $this->productPropertyItem['Значение']);
+
+            return trim($value);
         }
 
         return $this->productPropertyItem['Значение'];

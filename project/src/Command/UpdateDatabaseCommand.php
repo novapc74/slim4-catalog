@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Generator;
 use Throwable;
 use App\Traits\RunCommandTrait;
 use App\Traits\HumanSizeCounterTrait;
@@ -35,14 +36,14 @@ class UpdateDatabaseCommand extends Command
     {
 
         ini_set('memory_limit', '-1');
+
         $start = self::getScriptStartTime();
         $io = new SymfonyStyle($input, $output);
         $io->note('Обновляем базу данных');
 
-        array_map(
-            fn(string $entityName, string $commandName) => self::runCommand($entityName, $commandName, $io),
-            array_keys(self::MAPPING), self::MAPPING
-        );
+        foreach (self::getGen() as $item) {
+            self::runCommand($item['entityName'], $item['commandName'], $io);
+        }
 
         $io->success(sprintf(
                 'Память:%s. Время: %s.',
@@ -52,5 +53,12 @@ class UpdateDatabaseCommand extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    private static function getGen(): Generator
+    {
+        foreach (self::MAPPING as $entityName => $commandName) {
+            yield compact('entityName', 'commandName');
+        }
     }
 }

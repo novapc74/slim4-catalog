@@ -20,15 +20,18 @@ class Property extends Model
 
     public static function upsertProperty(array $data): int
     {
-        $i = 0;
-        foreach ($data as $property) {
-            self::updateOrCreate(
-                ['title' => $property['title']],
-                $property
-            );
-            $i++;
-        }
 
-        return $i;
+        return self::upsert($data, ['id', 'title']);
+
+//        $i = 0;
+//        foreach ($data as $property) {
+//            self::updateOrCreate(
+//                ['title' => $property['title']],
+//                $property
+//            );
+//            $i++;
+//        }
+//
+//        return $i;
     }
 }
